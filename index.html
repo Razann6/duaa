@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+ <title>ادعيه📿</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0b0f14;
+      --bg-soft:#0f141b;
+      --fg:#e7edf6;
+      --muted:#9db0c8;
+      --primary:#80d0ff;
+      --accent:#b38bff;
+      --card:#0d1218cc; /* glass */
+      --glass: blur(10px) saturate(120%);
+      --ring: 0 0 0 2px color-mix(in oklab, var(--primary) 35%, transparent);
+      --shadow: 0 10px 25px rgba(0,0,0,.45);
+    }
+
+    * { box-sizing:border-box }
+    html, body { height: 100% }
+    body {
+      margin:0; font-family:"Cairo", system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans Arabic", sans-serif;
+      color:var(--fg);
+      background: radial-gradient(1200px 800px at 80% -10%, #142130 0%, transparent 60%),
+                  radial-gradient(800px 600px at -10% 20%, #1a2433 0%, transparent 60%),
+                  linear-gradient(160deg, #090c12, #0b1119 60%, #0a0f15);
+      overflow-x:hidden;
+    }
+
+    /* Subtle starfield */
+    .stars { position:fixed; inset:0; pointer-events:none; z-index:0; }
+    .stars::before, .stars::after { content:""; position:absolute; inset:-50%; background-repeat:repeat; opacity:.35; animation: drift 120s linear infinite; filter: drop-shadow(0 0 2px #b9ddff);
+      background-image: radial-gradient(1px 1px at 20px 30px, #bfe2ff 50%, transparent 51%),
+                        radial-gradient(1px 1px at 120px 80px, #d7c8ff 50%, transparent 51%),
+                        radial-gradient(1px 1px at 260px 140px, #b5d9ff 50%, transparent 51%),
+                        radial-gradient(1px 1px at 400px 220px, #e0f0ff 50%, transparent 51%);
+      background-size: 500px 500px; }
+    .stars::after { opacity:.2; animation-duration: 200s; filter: drop-shadow(0 0 3px #d0c8ff); }
+    @keyframes drift { from { transform:translateX(0) translateY(0) } to { transform:translateX(500px) translateY(300px) } }
+
+    header {
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: var(--glass);
+      background: linear-gradient(180deg, #0c131acc, #0c131a99 60%, transparent);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .container { width:min(1100px, 92%); margin-inline:auto }
+    .nav {
+      display:flex; align-items:center; justify-content:space-between; gap:12px; padding:18px 0; 
+    }
+    .brand { display:flex; align-items:center; gap:12px }
+    .logo {
+      width:40px; height:40px; border-radius:12px; background:
+        radial-gradient(200px 120px at 20% 10%, #4f8dff33, transparent 60%),
+        linear-gradient(135deg, #79d6ff 10%, #8f79ff 90%);
+      box-shadow: inset 0 0 0 2px rgba(255,255,255,.12), var(--shadow);
+    }
+    .title { font-weight:700; letter-spacing:.3px; font-size:1.2rem }
+    .subtitle { color:var(--muted); font-size:.95rem }
+
+    .controls { display:flex; gap:12px; flex-wrap:wrap; align-items:center }
+    .search {
+      display:flex; align-items:center; gap:10px; 
+      background:var(--card); border:1px solid rgba(255,255,255,.08);
+      border-radius:14px; padding:10px 14px; box-shadow:var(--shadow);
+    }
+    .search input { 
+      all:unset; width:240px; max-width:62vw; color:var(--fg);
+    }
+    .chipbar { display:flex; gap:8px; flex-wrap:wrap }
+    .chip {
+      user-select:none; cursor:pointer; transition:.2s ease; 
+      background: linear-gradient(180deg, #111926cc, #0b1118cc);
+      border:1px solid rgba(255,255,255,.08); color:var(--muted);
+      padding:8px 12px; border-radius:999px; font-size:.85rem;
+    }
+    .chip.active { color:#0a0d12; background:linear-gradient(180deg, #86d7ff, #b197ff); border-color:transparent }
+
+    main { position:relative; z-index:1; padding: 18px 0 80px }
+    .grid { 
+      display:grid; gap:16px; 
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+      margin-top:14px; 
+    }
+    .card {
+      position:relative; overflow:hidden; border-radius:18px; padding:18px; 
+      background: var(--card); backdrop-filter: var(--glass);
+      border:1px solid rgba(255,255,255,.08); box-shadow: var(--shadow);
+      transform: translateY(6px); opacity:0; animation: pop .45s ease forwards;
+    }
+    @keyframes pop { to { transform: translateY(0); opacity:1 } }
+
+    .tag { font-size:.75rem; color:var(--primary); opacity:.9 }
+    .card h3 { margin:8px 0 10px; font-size:1.05rem }
+    .dua { line-height:1.9; color:#eef4ff; font-size:1rem }
+    .ref { margin-top:10px; font-size:.85rem; color:var(--muted) }
+
+    .actions { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap }
+    button.btn {
+      all:unset; cursor:pointer; padding:9px 12px; border-radius:12px; 
+      background: #111822; border:1px solid rgba(255,255,255,.08); 
+      font-size:.9rem; color:#dfe9f5; display:inline-flex; gap:8px; align-items:center;
+      transition: transform .06s ease;
+    }
+    button.btn:hover { box-shadow: var(--ring) }
+    button.btn:active { transform: translateY(1px) }
+    .btn.primary { background: linear-gradient(180deg, #86d7ff, #b197ff); color:#0b0f14; border:0 }
+    .btn.ghost { background:transparent }
+
+    .fav { position:absolute; top:12px; left:12px; padding:8px; border-radius:12px; background:#0d141dcc; border:1px solid rgba(255,255,255,.08); cursor:pointer }
+    .fav.active { background: linear-gradient(180deg, #ffd7a8, #ffc164); color:#2a1a00 }
+
+    .toolbar { display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 0 8px }
+
+    .toggle { display:flex; gap:8px; align-items:center }
+    .toggle input { accent-color: var(--accent) }
+    .count { color:var(--muted); font-size:.9rem }
+
+    .toast { position:fixed; bottom:20px; right:20px; background:#0e1722; border:1px solid rgba(255,255,255,.08); padding:12px 14px; border-radius:12px; box-shadow:var(--shadow); opacity:0; transform: translateY(8px); transition:.25s ease; z-index:50 }
+    .toast.show { opacity:1; transform: translateY(0) }
+
+    .fab { position:fixed; bottom:26px; left:26px; z-index:30 }
+    .fab button { all:unset; cursor:pointer; width:48px; height:48px; border-radius:16px; display:grid; place-items:center; background:linear-gradient(180deg, #86d7ff, #b197ff); color:#0b0f14; box-shadow:var(--shadow) }
+
+    footer { color:var(--muted); text-align:center; padding:40px 0 60px }
+    .hr { height:1px; background:linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent); margin:22px 0 }
+
+    /* Responsive tweaks */
+    @media (max-width: 520px) {
+      .title { font-size:1.05rem }
+      .subtitle { display:none }
+      .search input { width: 52vw }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div>
+  <header>
+    <div class="container">
+      <div class="nav">
+        <div class="brand">
+          <div class="logo" aria-hidden="true"></div>
+          <div>
+            <div class="title">أدعية</div>
+            <div class="subtitle">ادعية مختاره مع بحث ونسخ سريع</div>
+          </div>
+        </div>
+        <div class="controls">
+          <label class="search" aria-label="بحث">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.3-4.3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.6"/></svg>
+            <input id="q" placeholder="ابحث عن دعاء..." />
+          </label>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="chipbar" id="chipbar"></div>
+        <div class="toggle">
+          <input id="onlyFav" type="checkbox" />
+          <label for="onlyFav">إظهار المفضلة فقط</label>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="count" id="count"></div>
+    <div class="grid" id="grid" aria-live="polite"></div>
+    <div class="hr"></div>
+    <footer>
+      صُنع بحب — يمكنك حفظ الأدعية المفضلة لديك واستخدام البحث للوصول السريع.
+    </footer>
+  </main>
+
+  <div class="fab"><button id="toTop" title="أعلى">↑</button></div>
+  <div class="toast" id="toast">تم النسخ ✅</div>
+
+  <script>
+    // ======= Data =======
+    const DUAS = [
+      { id:1, title:"دعاء الصباح", tag:"الصباح", text:`أَصْبَحْنَا وَأَصْبَحَ المُلْكُ لِلَّهِ، والحمدُ لِلَّهِ، لا إلهَ إلا اللَّهُ وحدَهُ لا شريكَ له، له المُلْكُ وله الحمدُ وهو على كلِّ شيءٍ قدير.`, ref:"صحيح مسلم" },
+      { id:2, title:"دعاء المساء", tag:"المساء", text:`أَمْسَيْنا وَأَمْسَى المُلْكُ لِلَّهِ، والحمدُ لِلَّهِ، لا إلهَ إلا اللَّهُ وحدَهُ لا شريكَ له، له المُلْكُ وله الحمدُ وهو على كلِّ شيءٍ قدير.`, ref:"صحيح مسلم" },
+      { id:3, title:"سيد الاستغفار", tag:"أذكار عامة", text:`اللَّهُمَّ أَنْتَ رَبِّي لا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي، فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ.`, ref:"البخاري" },
+      { id:4, title:"قبل النوم", tag:"النوم", text:`بِاسْمِكَ اللَّهُمَّ أَمُوتُ وَأَحْيَا.`, ref:"البخاري" },
+      { id:5, title:"الاستيقاظ", tag:"النوم", text:`الحمدُ للهِ الذي أحيانا بعدما أماتنا وإليه النُّشور.`, ref:"البخاري" },
+      { id:6, title:"دعاء الكرب", tag:"الشدائد", text:`لا إلَهَ إلَّا اللَّهُ العَظِيمُ الحَلِيمُ، لا إلَهَ إلَّا اللَّهُ رَبُّ العَرْشِ العَظِيمِ، لا إلَهَ إلَّا اللَّهُ رَبُّ السَّمَاوَاتِ وَرَبُّ الأرْضِ وَرَبُّ العَرْشِ الكَرِيمِ.`, ref:"البخاري ومسلم" },
+      { id:7, title:"عند الهم والحزن", tag:"الشدائد", text:`اللَّهُمَّ إنِّي عبدُكَ ابنُ عبدِكَ ابنُ أَمَتِكَ، نَاصِيَتي بِيَدِكَ، مَاضٍ فِيَّ حُكْمُكَ، عَدْلٌ فِيَّ قَضَاؤُكَ، أسألُكَ بكلِّ اسمٍ هو لكَ سمَّيتَ به نفسَكَ ... أن تجعلَ القرآنَ ربيعَ قلبي ونورَ صدري وجلاءَ حزني وذَهابَ همِّي.`, ref:"أحمد" },
+      { id:8, title:"بين السجدتين", tag:"الصلاة", text:`رَبِّ اغْفِرْ لِي وارْحَمْنِي، واجْبُرْنِي، وارْفَعْنِي، وارْزُقْنِي، واهْدِنِي، وعافِنِي، واعْفُ عَنِّي.`, ref:"أبو داود" },
+      { id:9, title:"الركوع", tag:"الصلاة", text:`سُبْحَانَ رَبِّيَ العَظِيمِ.`, ref:"مسلم" },
+      { id:10, title:"السجود", tag:"الصلاة", text:`سُبْحَانَ رَبِّيَ الأَعْلَى.`, ref:"مسلم" },
+      { id:11, title:"الوتر", tag:"الصلاة", text:`اللَّهُمَّ اهْدِنِي فِيمَنْ هَدَيْتَ، وَعَافِنِي فِيمَنْ عَافَيْتَ ... تَبَارَكْتَ رَبَّنَا وَتَعَالَيْتَ.`, ref:"الترمذي" },
+      { id:12, title:"دعاء الاستخارة", tag:"أذكار عامة", text:`اللَّهُمَّ إنِّي أَسْتَخِيرُكَ بِعِلْمِكَ، وَأَسْتَقْدِرُكَ بِقُدْرَتِكَ ... وَاقْدُرْ لِي الخيرَ حيثُ كانَ، ثُمَّ أَرْضِنِي.`, ref:"البخاري" },
+      { id:13, title:"عند الإفطار", tag:"الصيام", text:`ذَهَبَ الظَّمَأُ وابتَلَّتِ العُرُوقُ، وثبَتَ الأجرُ إن شاءَ اللَّه.`, ref:"أبو داود" },
+      { id:14, title:"عند رؤية الهلال", tag:"المواسم", text:`اللَّهُمَّ أَهِلَّهُ عَلَيْنَا بِاليُمْنِ وَالإيمَانِ وَالسَّلامَةِ وَالإسْلامِ، رَبِّي وَرَبُّكَ اللَّهُ.`, ref:"الترمذي" },
+      { id:15, title:"عند نزول المطر", tag:"المواسم", text:`اللَّهُمَّ صَيِّبًا نَافِعًا.`, ref:"البخاري" },
+    ];
+
+    const TAGS = ["الكل", "الصباح", "المساء", "الصلاة", "النوم", "الشدائد", "أذكار عامة", "الصيام", "المواسم"]; 
+
+    // ======= State =======
+    const state = {
+      q: "",
+      tag: "الكل",
+      favOnly: false,
+      favs: new Set(JSON.parse(localStorage.getItem("duas:favs") || "[]")),
+    };
+
+    // ======= Elements =======
+    const grid = document.getElementById('grid');
+    const q = document.getElementById('q');
+    const chipbar = document.getElementById('chipbar');
+    const count = document.getElementById('count');
+    const toast = document.getElementById('toast');
+
+    // Build chips
+    TAGS.forEach(t => {
+      const c = document.createElement('button');
+      c.className = 'chip' + (t===state.tag ? ' active' : '');
+      c.textContent = t;
+      c.onclick = () => { state.tag = t; render(); setActiveChip(t); smoothToTop(); };
+      chipbar.appendChild(c);
+    });
+    function setActiveChip(t){
+      [...chipbar.children].forEach(el=>el.classList.toggle('active', el.textContent===t));
+    }
+
+    // Listeners
+    q.addEventListener('input', e => { state.q = e.target.value.trim(); render(); });
+    document.getElementById('onlyFav').addEventListener('change', e => { state.favOnly = e.target.checked; render(); });
+    document.getElementById('toTop').addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
+    // Helpers
+    function saveFavs(){ localStorage.setItem('duas:favs', JSON.stringify([...state.favs])); }
+    function showToast(msg="تم النسخ ✅"){ toast.textContent = msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'), 1500); }
+    function smoothToTop(){ window.scrollTo({ top: document.querySelector('header').offsetTop, behavior:'smooth' }); }
+
+    function filterData(){
+      return DUAS.filter(d => {
+        const matchTag = state.tag === 'الكل' || d.tag === state.tag;
+        const matchQ = !state.q || (d.title+" "+d.text+" "+d.ref).toLowerCase().includes(state.q.toLowerCase());
+        const matchFav = !state.favOnly || state.favs.has(d.id);
+        return matchTag && matchQ && matchFav;
+      });
+    }
+
+    function duaCard(d){
+      const li = document.createElement('article');
+      li.className = 'card';
+      li.innerHTML = `
+        <div class="fav ${state.favs.has(d.id)?'active':''}" title="إضافة للمفضلة" aria-label="مفضلة">★</div>
+        <div class="tag">${d.tag}</div>
+        <h3>${d.title}</h3>
+        <div class="dua">${d.text}</div>
+        <div class="ref">${d.ref}</div>
+        <div class="actions">
+          <button class="btn primary" data-act="copy">نسخ</button>
+          <button class="btn" data-act="share">مشاركة</button>
+          <button class="btn ghost" data-act="zoom">تكبير الخط</button>
+        </div>`;
+
+      // Fav toggle
+      li.querySelector('.fav').onclick = () => {
+        state.favs.has(d.id) ? state.favs.delete(d.id) : state.favs.add(d.id);
+        saveFavs(); li.querySelector('.fav').classList.toggle('active');
+      };
+
+      // Actions
+      li.querySelectorAll('button').forEach(b=>{
+        b.addEventListener('click', async () => {
+          const act = b.dataset.act;
+          if(act==='copy'){
+            try { await navigator.clipboard.writeText(`${d.title} — ${d.text}\n(${d.ref})`); showToast(); }
+            catch{ showToast('لم يتم النسخ — جرّب يدويًا'); }
+          }
+          else if(act==='share'){
+            const shareData = { title:d.title, text:`${d.title} — ${d.text}\n(${d.ref})` };
+            if(navigator.share){ try{ await navigator.share(shareData); } catch{} }
+            else { try{ await navigator.clipboard.writeText(shareData.text); showToast('تم النسخ للمشاركة ✅'); } catch{} }
+          }
+          else if(act==='zoom'){
+            const dua = li.querySelector('.dua');
+            const fs = window.getComputedStyle(dua).fontSize; const val = parseFloat(fs);
+            dua.style.fontSize = (val < 22 ? val+2 : 16) + 'px';
+          }
+        });
+      });
+
+      return li;
+    }
+
+    function render(){
+      const list = filterData();
+      grid.replaceChildren(...list.map(duaCard));
+      count.textContent = list.length ? `عدد النتائج: ${list.length}` : 'لا توجد نتائج — جرّب كلمات أقل أو تصنيفًا آخر';
+    }
+
+    render();
+  </script>
+</body>
+</html>
